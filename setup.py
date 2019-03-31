@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name='pspring',
-    version='0.0.1',
+    version='0.0.3',
     license='TBD',
     author='Vasudevan Palani',
     author_email='vasudevan.palani@gmail.com',
