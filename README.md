@@ -32,6 +32,7 @@ class Logger():
     print("Hi");
   
 class MyApp():
+  @Autowired()
   def __init__(self,mylogger:Logger):
     self.logger = mylogger
 
