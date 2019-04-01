@@ -1,6 +1,6 @@
 # pspring
 
-This is a lightweight framework to enable spring developers to quickly develop apps with annotations/decorators. Inspired by Spring Framework of Java, the framework provides the ability for IOC ( Inversion of control ) and Autowiring the beans.
+This is a lightweight framework to enable python developers to quickly develop apps with annotations/decorators. Inspired by Spring Framework of Java, the framework provides the ability for IOC ( Inversion of control ) and Autowiring the beans.
 
 The default environment variables can always be found `defaultvars.py` file
 
