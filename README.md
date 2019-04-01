@@ -15,3 +15,13 @@ Below is the index the annotations/decorators supported by this module
 
   This decorator is the heard of dependency injection and will autowire the arguments of a method ( especially used in `__init__` constructor ). You can provide a list of name value pairs where, `name` is the argument name in the method definition for which a bean named `beanname` would be injected with that qualifier.
  
+
+## Usage
+
+The context of pspring should be initialized before any dependency injection is expected. A sample of code is show below
+
+```python
+from pspring import *
+
+context.initialize()
+```
