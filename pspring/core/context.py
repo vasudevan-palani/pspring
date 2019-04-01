@@ -29,18 +29,30 @@ class Context():
             else:
                 return inst
 
+    def registerByName(self,name,inst):
+        Context.context.get("byQualifier").update({
+            beanName : inst
+        })
+
+    def registerByType(self,inst):
+        typeList = inspect.getmro(type(inst))
+        for typeName in typeList:
+            if typeName == type(object()):
+                continue
+            Context.context.get("byType").update({
+                typeName : inst
+            })
+
     def createBean(self,beanName,beanObj):
         argspec = inspect.getfullargspec(beanObj.__init__)[0]
         args = [];
         for i in range(len(argspec)-1):
             args.append(None)
         inst = beanObj(*args)
-        Context.context.get("byQualifier").update({
-            beanName : inst
-        })
-        Context.context.get("byType").update({
-            type(inst) : inst
-        })
+
+        self.registerByName(beanName,inst)
+        self.registerByType(type(inst),inst)
+
 
     def initialize(self):
         definitions = Context.context.get("definitions")
