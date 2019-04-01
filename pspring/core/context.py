@@ -31,7 +31,7 @@ class Context():
 
     def registerByName(self,name,inst):
         Context.context.get("byQualifier").update({
-            beanName : inst
+            name : inst
         })
 
     def registerByType(self,inst):
@@ -51,7 +51,7 @@ class Context():
         inst = beanObj(*args)
 
         self.registerByName(beanName,inst)
-        self.registerByType(type(inst),inst)
+        self.registerByType(inst)
 
 
     def initialize(self):
