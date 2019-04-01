@@ -23,5 +23,20 @@ The context of pspring should be initialized before any dependency injection is 
 ```python
 from pspring import *
 
+@Bean()
+class Logger():
+  def __init__():
+    pass
+  
+  def sayHi():
+    print("Hi");
+  
+class MyApp():
+  def __init__(self,mylogger:Logger):
+    self.logger = mylogger
+
 context.initialize()
+
+app = MyApp()
+app.logger.sayHi()
 ```
