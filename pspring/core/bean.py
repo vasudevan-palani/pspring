@@ -1,4 +1,4 @@
-from .context import context
+from .context import ApplicationContext
 import inspect
 class Bean():
     def __init__(self,**kargs):
@@ -7,5 +7,5 @@ class Bean():
     def __call__(self,classObj):
         name = self.name if self.name != "" else classObj.__name__
         classObj.__bean_name__ = name
-        context.addBeanDefinition(classObj)
+        ApplicationContext.addBeanDefinition(classObj)
         return classObj

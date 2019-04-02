@@ -1,4 +1,4 @@
-from .context import context
+from .context import ApplicationContext
 import inspect
 
 class Autowired():
@@ -15,7 +15,7 @@ class Autowired():
             for arg in argsList:
                 if arg == 'self' :
                     continue
-                bean = context.resolve(arg,annotations.get(arg))
+                bean = ApplicationContext.resolve(arg,annotations.get(arg))
                 realargs.append(bean)
             beanMethod(*realargs,**kargs)
         return constructor
