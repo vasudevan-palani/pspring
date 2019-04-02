@@ -59,4 +59,4 @@ class Context():
         for beanName in definitions:
             self.createBean(beanName,definitions[beanName])
 
-context = Context()
+ApplicationContext = Context()
