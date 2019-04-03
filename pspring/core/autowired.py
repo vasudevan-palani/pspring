@@ -15,7 +15,10 @@ class Autowired():
             for arg in argsList:
                 if arg == 'self' :
                     continue
-                bean = ApplicationContext.resolve(arg,annotations.get(arg))
+                if self.config.get(arg) != None:
+                    bean = ApplicationContext.resolve(self.config.get(arg),annotations.get(arg))
+                else
+                    bean = ApplicationContext.resolve(arg,annotations.get(arg))
                 realargs.append(bean)
             beanMethod(*realargs,**kargs)
         return constructor

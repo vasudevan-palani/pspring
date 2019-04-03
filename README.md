@@ -23,7 +23,7 @@ The context of pspring should be initialized before any dependency injection is 
 ```python
 from pspring import *
 
-@Bean()
+@Bean(name="loggerBeanName")
 class Logger():
   def __init__():
     pass
@@ -32,7 +32,7 @@ class Logger():
     print("Hi");
 
 class MyApp():
-  @Autowired()
+  @Autowired(mylogger="loggerBeanName")
   def __init__(self,mylogger:Logger):
     self.logger = mylogger
 

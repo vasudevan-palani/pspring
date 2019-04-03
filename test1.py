@@ -10,3 +10,5 @@ class B():
     @A()
     def __init__(self,a,b:str):
         pass
+
+inspect.getmro(B)
