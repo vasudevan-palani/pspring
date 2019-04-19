@@ -23,7 +23,11 @@ class Context():
         if inst != None:
             return inst
         else:
-            inst = self.getClassByType(type)
+            instArray = self.getClassByType(type)
+            if instArray!=None and len(instArray) > 1:
+                raise Exception("More than one instance found for type " +str(type))
+            else:
+                inst = instArray[0]
             if inst == None and Context.context.get("definitions").get(name,None) != None:
                 return self.createBean(name,Context.context.get("definitions").get(name))
             else:
@@ -39,9 +43,11 @@ class Context():
         for typeName in typeList:
             if typeName == type(object()):
                 continue
-            Context.context.get("byType").update({
-                typeName : inst
-            })
+
+            if Context.context.get("byType").get(typeName,None) == None:
+                Context.context.get("byType")[typeName]=[]
+
+            Context.context.get("byType")[typeName].push(inst)
 
     def createBean(self,beanName,beanObj):
         argspec = inspect.getfullargspec(beanObj.__init__)[0]

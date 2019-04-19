@@ -17,7 +17,7 @@ class Autowired():
                     continue
                 if self.config.get(arg) != None:
                     bean = ApplicationContext.resolve(self.config.get(arg),annotations.get(arg))
-                else
+                else:
                     bean = ApplicationContext.resolve(arg,annotations.get(arg))
                 realargs.append(bean)
             beanMethod(*realargs,**kargs)
