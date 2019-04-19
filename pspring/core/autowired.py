@@ -20,5 +20,5 @@ class Autowired():
                 else:
                     bean = ApplicationContext.resolve(arg,annotations.get(arg))
                 realargs.append(bean)
-            beanMethod(*realargs,**kargs)
+            return beanMethod(*realargs,**kargs)
         return constructor

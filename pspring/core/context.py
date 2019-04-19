@@ -1,5 +1,6 @@
 import inspect
 
+from .config import Configuration
 
 class Context():
     context = None
@@ -47,7 +48,7 @@ class Context():
             if Context.context.get("byType").get(typeName,None) == None:
                 Context.context.get("byType")[typeName]=[]
 
-            Context.context.get("byType")[typeName].push(inst)
+            Context.context.get("byType")[typeName].append(inst)
 
     def createBean(self,beanName,beanObj):
         argspec = inspect.getfullargspec(beanObj.__init__)[0]
