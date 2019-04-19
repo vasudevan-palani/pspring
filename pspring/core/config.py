@@ -47,16 +47,28 @@ class Configuration():
 
     @staticmethod
     def getProperty(propertyName):
-        if os.environ.get(propertyName) != None:
-            return os.environ.get(propertyName)
-        else:
-            for bean in Configuration._configProviders:
-                propertyValue = bean.getProperty(propertyName)
-                if propertyValue != None:
-                    return propertyValue
+        propertyScopeArray = propertyName.split(".")
+        propertyScopes = []
 
-        if Configuration._defaults.get(propertyName) != None:
-            return Configuration._defaults.get(propertyName)
+        configProperty = propertyScopeArray.pop()
+        propertyScopes.append(configProperty)
+        fullPropertyScope=""
+
+        for propertyScope in propertyScopeArray:
+            fullPropertyScope = fullPropertyScope+propertyScope + "."
+            propertyScopes.append(fullPropertyScope+configProperty)
+
+        for derivedPropertyName in propertyScopes:
+            if os.environ.get(derivedPropertyName) != None:
+                return os.environ.get(derivedPropertyName)
+            else:
+                for bean in Configuration._configProviders:
+                    propertyValue = bean.getProperty(derivedPropertyName)
+                    if propertyValue != None:
+                        return propertyValue
+
+            if Configuration._defaults.get(derivedPropertyName) != None:
+                return Configuration._defaults.get(derivedPropertyName)
 
         return None
 
