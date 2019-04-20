@@ -16,7 +16,7 @@ class _ConfigInstance():
         for subscription in self.subscriptions:
             subscription()
 
-    def subscribe(callback):
+    def subscribe(self,callback):
         self.subscriptions.append(callback)
 
 class Configuration():
