@@ -76,6 +76,10 @@ class Configuration():
     def clear():
         return Configuration._config.clear()
 
+    @staticmethod
+    def refresh():
+        for bean in _configProviders:
+            bean.refresh()
 
     @staticmethod
     def initialize(_configProviders):

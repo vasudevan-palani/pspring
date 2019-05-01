@@ -11,3 +11,7 @@ class ConfigurationProvider():
     @abstractmethod
     def subscribe(self,callback):
         pass
+
+    @abstractmethod
+    def refresh(self):
+        pass
