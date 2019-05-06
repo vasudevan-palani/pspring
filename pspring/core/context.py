@@ -8,9 +8,13 @@ class Context():
         if Context.context == None:
             Context.context = {"byQualifier":{},"byType":{},"definitions":{}}
 
-    def addBeanDefinition(self,beanObj):
+    def clear(self):
+        Context.context.clear()
+        Context.context = {"byQualifier":{},"byType":{},"definitions":{}}
+
+    def addBeanDefinition(self,beanObj,args=None):
         Context.context.get("definitions").update({
-            beanObj.__bean_name__ : beanObj
+            beanObj.__bean_name__ : (beanObj,args)
         })
 
     def getClassByName(self,name):
@@ -51,11 +55,28 @@ class Context():
             Context.context.get("byType")[typeName].append(inst)
 
     def createBean(self,beanName,beanObj):
-        argspec = inspect.getfullargspec(beanObj.__init__)[0]
+        beanClass = beanObj[0]
+        beanArgs = beanObj[1]
+        argspec = inspect.getfullargspec(beanClass.__init__)[0]
         args = [];
-        for i in range(len(argspec)-1):
-            args.append(None)
-        inst = beanObj(*args)
+        for i in range(len(argspec)):
+            #Skip the self args for methods bound to class
+            #
+            if(argspec[i]=="self"):
+                continue
+
+            #Check if the args is provided
+            #
+            if beanArgs.get(argspec[i]) != None:
+                args.append(beanArgs.get(argspec[i]))
+
+            #Default args
+            else:
+                args.append(None)
+
+        #Create the instance of the bean
+        #
+        inst = beanClass(*args)
 
         self.registerByName(beanName,inst)
         self.registerByType(inst)

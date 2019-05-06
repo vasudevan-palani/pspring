@@ -33,6 +33,43 @@ def test_EnvConfig():
     Configuration.initialize([TestConfigProvider()])
     assert Configuration.getProperty("pspring.test.name") == "environname"
 
+def test_beanwithargs():
+
+    @Bean(args={"q":"1","b":"2"})
+    class Test1():
+        def __init__(self,q,b):
+            self.q=q
+            self.b=b
+
+        def getQ(self):
+            return self.q
+
+    class Test2():
+        @Autowired()
+        def getVal(self,test1:Test1):
+            return test1.getQ()
+
+    ApplicationContext.initialize()
+
+    assert Test2().getVal() == "1"
+
+def test_beanfrommethod():
+    ApplicationContext.clear()
+
+    class Test1():
+        def __init__(self,q):
+            self.q = q
+
+        def getQ(self):
+            return self.q
+
+    @Bean(name="testbean")
+    def getBean():
+        return Test1(1)
+
+    ApplicationContext.initialize()
+
+    assert ApplicationContext.resolve("testbean",None).getQ() == 1
 
 def test_autowired():
 
@@ -69,6 +106,33 @@ def test_autowiredsubclass():
             pass
 
         def getName(self):
+            return "testName1"
+
+
+    class Test3():
+        @Autowired()
+        def getTestName(self,name:Test):
+            #print(name.getName())
+            return name.getName()
+
+    ApplicationContext.initialize()
+    assert Test3().getTestName() == "testName1"
+
+def test_autowiredsubclassconflict():
+
+    class Test():
+        def __init__(self):
+            pass
+
+        def getName(self):
+            return "testName"
+
+    @Bean()
+    class Test1(Test):
+        def __init__(self):
+            pass
+
+        def getName(self):
             return "testName"
 
     @Bean()
@@ -88,5 +152,6 @@ def test_autowiredsubclass():
     ApplicationContext.initialize()
     try:
         Test3().getTestName() == "testName"
+        assert False
     except Exception as e:
         assert True
