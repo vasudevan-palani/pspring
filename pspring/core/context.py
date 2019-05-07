@@ -23,6 +23,19 @@ class Context():
     def getClassByType(self,type):
         return Context.context.get("byType").get(type,None)
 
+    def getClassThatDefinedMethod(meth):
+        if inspect.ismethod(meth):
+            for cls in inspect.getmro(meth.__self__.__class__):
+               if cls.__dict__.get(meth.__name__) is meth:
+                    return cls
+            meth = meth.__func__  # fallback to __qualname__ parsing
+        if inspect.isfunction(meth):
+            cls = getattr(inspect.getmodule(meth),
+                          meth.__qualname__.split('.<locals>', 1)[0].rsplit('.', 1)[0])
+            if isinstance(cls, type):
+                return cls
+        return getattr(meth, '__objclass__', None) 
+
     def resolve(self,name,type):
         inst = self.getClassByName(name)
         if inst != None:
@@ -54,9 +67,31 @@ class Context():
 
             Context.context.get("byType")[typeName].append(inst)
 
-    def createBean(self,beanName,beanObj):
-        beanClass = beanObj[0]
-        beanArgs = beanObj[1]
+    def createBeanFromMethod(self,beanClass,beanArgs):
+        argspec = inspect.getfullargspec(beanClass)[0]
+        args = [];
+        for i in range(len(argspec)):
+            #Skip the self args for methods bound to class
+            #
+            if(argspec[i]=="self"):
+                args.append(self.getClassThatDefinedMethod(beanClass)())
+
+            #Check if the args is provided
+            #
+            if beanArgs.get(argspec[i]) != None:
+                args.append(beanArgs.get(argspec[i]))
+
+            #Default args
+            else:
+                args.append(None)
+
+        #Create the instance of the bean
+        #
+        inst = beanClass(*args)
+
+        return inst
+
+    def createBeanFromClass(self,beanClass,beanArgs):
         argspec = inspect.getfullargspec(beanClass.__init__)[0]
         args = [];
         for i in range(len(argspec)):
@@ -78,8 +113,20 @@ class Context():
         #
         inst = beanClass(*args)
 
-        self.registerByName(beanName,inst)
-        self.registerByType(inst)
+        return inst
+
+    def createBean(self,beanName,beanObj):
+        beanClass = beanObj[0]
+        beanArgs = beanObj[1]
+        inst = None
+        if type(beanClass) == "<class 'function'>":
+            inst = self.createBeanFromMethod(beanClass,beanArgs)
+        else:
+            inst = self.createBeanFromClass(beanClass,beanArgs)
+        
+        if (inst != None):
+            self.registerByName(beanName,inst)
+            self.registerByType(inst)
 
 
     def initialize(self):
