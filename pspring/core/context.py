@@ -1,4 +1,4 @@
-import inspect
+import inspect, types
 
 from .config import Configuration
 
@@ -119,7 +119,7 @@ class Context():
         beanClass = beanObj[0]
         beanArgs = beanObj[1]
         inst = None
-        if type(beanClass) == "<class 'function'>":
+        if type(beanClass) == types.FunctionType:
             inst = self.createBeanFromMethod(beanClass,beanArgs)
         else:
             inst = self.createBeanFromClass(beanClass,beanArgs)
