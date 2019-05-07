@@ -23,7 +23,7 @@ class Context():
     def getClassByType(self,type):
         return Context.context.get("byType").get(type,None)
 
-    def getClassThatDefinedMethod(meth):
+    def getClassThatDefinedMethod(self,meth):
         if inspect.ismethod(meth):
             for cls in inspect.getmro(meth.__self__.__class__):
                if cls.__dict__.get(meth.__name__) is meth:
@@ -78,7 +78,7 @@ class Context():
 
             #Check if the args is provided
             #
-            if beanArgs.get(argspec[i]) != None:
+            elif beanArgs!=None and beanArgs.get(argspec[i]) != None:
                 args.append(beanArgs.get(argspec[i]))
 
             #Default args
