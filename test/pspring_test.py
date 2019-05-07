@@ -71,28 +71,6 @@ def test_beanfrommethod():
 
     assert ApplicationContext.resolve("testbean",None).getQ() == 1
 
-def test_beanfrommethodInsideClass():
-    ApplicationContext.clear()
-
-    class Test1():
-        def __init__(self,q):
-            self.q = q
-
-        def getQ(self):
-            return self.q
-
-    class Test2():
-        def __init__(self,q):
-            self.q = q
-
-        @Bean(name="testbean")
-        def getBean():
-            return Test1(1)
-
-    ApplicationContext.initialize()
-
-    assert ApplicationContext.resolve("testbean",None).getQ() == 1
-
 def test_autowired():
 
     @Bean()
