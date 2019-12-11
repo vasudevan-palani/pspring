@@ -1,15 +1,22 @@
 import inspect
 import os
+from datetime import datetime
 from .configprovider import ConfigurationProvider
 
 class _ConfigInstance():
-    def __init__(self,name,config):
+    def __init__(self,name,config,timeout):
         self.name = name
         self.config = config
         config.subscribe(self.callback)
         self.subscriptions = []
+        self.timeout = timeout
+        self.lastUpdated = datetime.now()
 
     def getProperty(self,propertyName):
+        lastUpdatedSeconds = datetime.now() - self.lastUpdated
+        if(self.timeout != None and lastUpdatedSeconds > self.timeout):
+            self.config.refresh()
+            self.lastUpdated = datetime.now()
         return self.config.getProperty(self.name+"."+propertyName)
 
     def callback(self):
@@ -29,8 +36,8 @@ class Configuration():
         raise Exception("This is a singleton")
 
     @staticmethod
-    def getConfig(moduleName):
-        return _ConfigInstance(moduleName,Configuration)
+    def getConfig(moduleName,timeout=None):
+        return _ConfigInstance(moduleName,Configuration,timeout)
 
     @staticmethod
     def subscribe(callback):
