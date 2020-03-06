@@ -10,13 +10,13 @@ class _ConfigInstance():
         config.subscribe(self.callback)
         self.subscriptions = []
         self.timeout = timeout
-        self.lastUpdated = datetime.now()
+        self.lastUpdated = int(datetime.now().timestamp())
 
     def getProperty(self,propertyName):
-        lastUpdatedSeconds = datetime.now() - self.lastUpdated
+        lastUpdatedSeconds = int(datetime.now().timestamp()) - self.lastUpdated
         if(self.timeout != None and lastUpdatedSeconds > self.timeout):
             self.config.refresh()
-            self.lastUpdated = datetime.now()
+            self.lastUpdated = int(datetime.now().timestamp())
         return self.config.getProperty(self.name+"."+propertyName)
 
     def callback(self):
