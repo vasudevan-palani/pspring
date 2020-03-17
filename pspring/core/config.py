@@ -85,7 +85,7 @@ class Configuration():
 
     @staticmethod
     def refresh():
-        for bean in _configProviders:
+        for bean in Configuration._configProviders:
             bean.refresh()
 
     @staticmethod
