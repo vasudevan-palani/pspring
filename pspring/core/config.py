@@ -36,7 +36,7 @@ class Configuration():
         raise Exception("This is a singleton")
 
     @staticmethod
-    def getConfig(moduleName,timeout=None):
+    def getConfig(moduleName,timeout=600):
         return _ConfigInstance(moduleName,Configuration,timeout)
 
     @staticmethod
