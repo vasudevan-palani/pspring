@@ -15,8 +15,8 @@ class _ConfigInstance():
     def getProperty(self,propertyName,defaultValue=None):
         lastUpdatedSeconds = int(datetime.now().timestamp()) - self.lastUpdated
         if(self.timeout != None and lastUpdatedSeconds > int(self.timeout)):
-            self.config.refresh()
             self.lastUpdated = int(datetime.now().timestamp())
+            self.config.refresh()
         propertyValue = self.config.getProperty(self.name+"."+propertyName)
         if propertyValue == None:
             propertyValue = defaultValue
