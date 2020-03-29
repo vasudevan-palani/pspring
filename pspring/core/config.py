@@ -69,6 +69,7 @@ class Configuration():
             fullPropertyScope = fullPropertyScope+propertyScope + "."
             propertyScopes.append(fullPropertyScope+configProperty)
 
+        propertyScopes.reverse()
         for derivedPropertyName in propertyScopes:
             if os.environ.get(derivedPropertyName) != None:
                 return os.environ.get(derivedPropertyName)
