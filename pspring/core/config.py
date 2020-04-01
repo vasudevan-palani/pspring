@@ -17,6 +17,7 @@ class _ConfigInstance():
         if(self.timeout != None and lastUpdatedSeconds > int(self.timeout)):
             self.lastUpdated = int(datetime.now().timestamp())
             self.config.refresh()
+            self.callback()
         propertyValue = self.config.getProperty(self.name+"."+propertyName)
         if propertyValue == None:
             propertyValue = defaultValue
