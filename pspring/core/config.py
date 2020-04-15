@@ -4,7 +4,7 @@ from datetime import datetime
 from .configprovider import ConfigurationProvider
 
 class _ConfigInstance():
-    def __init__(self,name,config,timeout):
+    def __init__(self,name,config):
         self.name = name
         self.config = config
         config.subscribe(self.callback)
