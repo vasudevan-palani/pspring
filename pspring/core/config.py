@@ -9,15 +9,8 @@ class _ConfigInstance():
         self.config = config
         config.subscribe(self.callback)
         self.subscriptions = []
-        self.timeout = timeout
-        self.lastUpdated = int(datetime.now().timestamp())
 
     def getProperty(self,propertyName,defaultValue=None):
-        lastUpdatedSeconds = int(datetime.now().timestamp()) - self.lastUpdated
-        if(self.timeout != None and lastUpdatedSeconds > int(self.timeout)):
-            self.lastUpdated = int(datetime.now().timestamp())
-            self.config.refresh()
-            self.callback()
         propertyValue = self.config.getProperty(self.name+"."+propertyName)
         if propertyValue == None:
             propertyValue = defaultValue
@@ -41,8 +34,8 @@ class Configuration():
         raise Exception("This is a singleton")
 
     @staticmethod
-    def getConfig(moduleName,timeout=os.environ.get("PSPRING_CONFIG_TIMEOUT",None)):
-        return _ConfigInstance(moduleName,Configuration,timeout)
+    def getConfig(moduleName):
+        return _ConfigInstance(moduleName,Configuration)
 
     @staticmethod
     def subscribe(callback):
