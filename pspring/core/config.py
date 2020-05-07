@@ -22,7 +22,8 @@ class _ConfigInstance():
             subscription()
 
     def subscribe(self,callback):
-        self.subscriptions.append(callback)
+        pass
+        #self.subscriptions.append(callback)
 
 class Configuration():
     _defaults = {}
@@ -39,7 +40,8 @@ class Configuration():
 
     @staticmethod
     def subscribe(callback):
-        Configuration._subscriptions.append(callback)
+        pass
+        #Configuration._subscriptions.append(callback)
 
     @staticmethod
     def callback():
@@ -89,6 +91,7 @@ class Configuration():
 
     @staticmethod
     def initialize(_configProviders):
+        Configuration._subscriptions = []
         Configuration._configProviders = _configProviders
         #_configProviders = ApplicationContext.getClassByType(ConfigurationProvider)
         for bean in _configProviders:
