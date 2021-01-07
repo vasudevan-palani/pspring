@@ -1,6 +1,6 @@
 import sys,os,time
-sys.path.insert(0,"../../")
-from pspring import Configuration, ConfigurationProvider, ApplicationContext,Bean,Autowired
+sys.path.insert(0,".")
+from pspring import Configuration, ConfigurationProvider, ApplicationContext,Bean,Autowired, JsonConfigProvider
 
 def test_defaults():
     Configuration.defaults({
@@ -156,45 +156,10 @@ def test_autowiredsubclassconflict():
     except Exception as e:
         assert True
 
-def test_ConfigurationProvider_Timeout():
-    class TestConfigProvider(ConfigurationProvider):
-        def __init__(self):
-            self.data={}
-            self.subscriptions=[]
-            self.count = 0
-            self.refresh()
-            
+def test_jsonconfigprovider():
+    configp = JsonConfigProvider({"name":"vasu"})
+    Configuration.initialize([configp])
 
-        def refresh(self):
-            print("In refresh")
-            if self.count == 0:
-                self.data["name"] = "myname"
-                self.count = 1
-            elif self.count == 1:
-                self.data["name"] = "myname1"
-            self.publish()
-            
-        def getProperty(self,propertyName):
-            return self.data.get(propertyName)
+    config = Configuration.getConfig(__name__)
 
-
-        def subscribe(self,callback):
-            self.subscriptions.append(callback)
-
-        def publish(self):
-            for subscription in self.subscriptions:
-                subscription()
-
-    def callback():
-        pass
-
-    configProvider = TestConfigProvider()
-
-    config = Configuration.getConfig(__name__,1)
-    config.subscribe(callback)
-    Configuration.initialize([configProvider])
-    
-    assert config.getProperty("name") == "myname"
-    time.sleep(3)
-    assert config.getProperty("name") == "myname1"
-
+    assert config.getProperty("name") == "vasu"

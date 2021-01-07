@@ -12,3 +12,4 @@ from .core.context import *
 from .core.config import *
 from .core.configprovider import *
 from .core.cacheprovider import *
+from .core.jsonconfigprovider import *
