@@ -10,3 +10,15 @@ class Bean():
         classObj.__bean_name__ = name
         ApplicationContext.addBeanDefinition(classObj,self.initargs)
         return classObj
+
+    @classmethod
+    def register(cls,class_obj,**kargs):
+        initargs = kargs.get("args",None)
+        name = kargs.get("name","")
+        name = name if name != None else class_obj.__name__
+        def get_instance():
+            return class_obj
+
+        get_instance.__bean_name__ = name
+
+        ApplicationContext.addBeanDefinition(get_instance,initargs)

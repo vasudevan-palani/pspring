@@ -12,13 +12,18 @@ class Autowired():
             argsList = spec[0]
             annotations = spec[6]
             realargs=[args[0]]
-            for arg in argsList:
+            for i in range(len(argsList)):
+                arg = argsList[i]
                 if arg == 'self' :
                     continue
                 if self.config.get(arg) != None:
                     bean = ApplicationContext.resolve(self.config.get(arg),annotations.get(arg))
                 else:
                     bean = ApplicationContext.resolve(arg,annotations.get(arg))
-                realargs.append(bean)
+
+                if bean is not None:
+                    realargs.append(bean)
+                else:
+                    realargs.append(args[i])
             return beanMethod(*realargs,**kargs)
         return constructor

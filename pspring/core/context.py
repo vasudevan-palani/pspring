@@ -44,7 +44,7 @@ class Context():
             instArray = self.getClassByType(type)
             if instArray!=None and len(instArray) > 1:
                 raise Exception("More than one instance found for type " +str(type))
-            else:
+            elif instArray != None:
                 inst = instArray[0]
             if inst == None and Context.context.get("definitions").get(name,None) != None:
                 return self.createBean(name,Context.context.get("definitions").get(name))

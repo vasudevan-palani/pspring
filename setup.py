@@ -6,7 +6,7 @@ with open(path.join(this_directory, 'README.md'), encoding='utf-8') as f:
 
 setup(
     name='pspring',
-    version='0.0.37',
+    version='0.0.38',
     license='TBD',
     author='Vasudevan Palani',
     author_email='vasudevan.palani@gmail.com',
