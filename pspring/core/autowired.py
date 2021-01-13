@@ -21,9 +21,9 @@ class Autowired():
                 else:
                     bean = ApplicationContext.resolve(arg,annotations.get(arg))
 
-                if bean is not None:
-                    realargs.append(bean)
-                else:
+                if len(args)>i and args[i] is not None:
                     realargs.append(args[i])
+                else:
+                    realargs.append(bean)
             return beanMethod(*realargs,**kargs)
         return constructor
