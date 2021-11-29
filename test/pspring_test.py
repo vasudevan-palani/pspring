@@ -163,3 +163,40 @@ def test_jsonconfigprovider():
     config = Configuration.getConfig(__name__)
 
     assert config.getProperty("name") == "vasu"
+
+
+def test_funcastrue():
+    configp = JsonConfigProvider({"name":"vasu"})
+    Configuration.initialize([configp])
+
+    config = Configuration.getConfig(__name__)
+
+    getName = config.getProperty("name", Func=True)
+    assert getName() == "vasu"
+
+
+
+def test_funcasfalse():
+    configp = JsonConfigProvider({"name":"vasu"})
+    Configuration.initialize([configp])
+
+    config = Configuration.getConfig(__name__)
+
+    name = config.getProperty("name", Func=False)
+    assert name == "vasu"
+
+
+def test_funcasfalse_useitasfunc():
+    configp = JsonConfigProvider({"name":"vasu"})
+    Configuration.initialize([configp])
+
+    config = Configuration.getConfig(__name__)
+
+    name = config.getProperty("name", Func=False)
+
+    try:
+        name() == "vasu"
+        assert False
+    except Exception as e:
+        assert True
+

@@ -10,7 +10,14 @@ class _ConfigInstance():
         config.subscribe(self.callback)
         self.subscriptions = []
 
-    def getProperty(self,propertyName,defaultValue=None):
+    def getProperty(self,propertyName,defaultValue=None,**kwargs):
+        func = kwargs.get("Func",False)
+        if func:
+            return lambda: self.__getPropertyAsValue(propertyName,defaultValue)
+        else:
+            return self.__getPropertyAsValue(propertyName, defaultValue)
+
+    def __getPropertyAsValue(self,propertyName,defaultValue=None):
         propertyValue = self.config.getProperty(self.name+"."+propertyName)
         if propertyValue == None:
             propertyValue = defaultValue
